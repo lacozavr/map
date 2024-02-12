@@ -22,6 +22,13 @@ class Map(QMainWindow):
         self.shirota.setText(self.s)
         self.dolgota.setText(self.d)
         self.aaaa.setText(self.m)
+        self.vid.addItem('Схема')
+        self.vid.addItem('Спутник')
+        self.vid.addItem('Гибрид')
+        self.vids = {'Схема': 'map',
+                     'Спутник': 'sat',
+                     'Гибрид': 'skl'}
+        self.vid.currentTextChanged.connect(self.search)
 
 
     def search(self):
@@ -34,8 +41,9 @@ class Map(QMainWindow):
         self.shirota.setText(self.s + f' {self.x}')
         self.dolgota.setText(self.d + f' {self.y}')
         self.aaaa.setText(self.m + f' {self.mas_1} X {self.mas_2}')
+
         api_server = f"https://static-maps.yandex.ru/1.x/?ll={self.x},{self.y}" \
-                     f"&spn={self.mas_1},{self.mas_2}&l=map"
+                     f"&spn={self.mas_1},{self.mas_2}&l={self.vids[self.vid.currentText()]}"
         response = requests.get(api_server)
         if response:
             with open('map.png', 'wb') as file:
